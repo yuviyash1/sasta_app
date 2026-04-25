@@ -4,7 +4,9 @@ const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  './https://yashwant-singh.com.np/logoo/icon-192.png'
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png',
+  './x.jpeg'
 ];
 
 self.addEventListener('install', event => {
