@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA Test App</title>
+    <title>Test App</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#317EFB"/>
     <style>
@@ -19,6 +19,11 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        img {
+            margin-top: 20px;
+            width: 100px;
+            height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -27,8 +32,9 @@
         <p>If your setup is correct, your browser will offer to "Add to Home Screen" or "Install".</p>
     </div>
 
-    <img src="https://yashwant-singh.com.np/logoo/icon-192.png">
-    <img src="https://yashwant-singh.com.np/logoo/icon-512.png">
+    <img src="img.png" alt="Test Image">
+
+
     
     <script>
         if ('serviceWorker' in navigator) {
