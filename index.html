@@ -3,278 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIPHER - Hacker Dashboard</title>
+    <title>For My Love</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0d0221"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <!-- <meta charset="UTF-8"> -->
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <title>For You</title>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap');
 
         :root {
-            --primary-pink: #ff4d6d;
-            --secondary-pink: #ff85a1;
-            --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            --hot-pink: #ff0a54;
+            --soft-pink: #ff85a1;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-gradient);
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 3rem;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.2);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* The Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
-            max-width: 400px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            max-width: 450px;
             width: 90%;
-            cursor: pointer;
+            animation: floatCard 4s ease-in-out infinite;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        .heart-icon {
-            color: var(--primary-pink);
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: beat 1.2s infinite;
+        /* Image Styling */
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(255, 10, 84, 0.3);
+            margin-bottom: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.1) rotate(5deg);
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 3.5rem;
-            color: var(--primary-pink);
-            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 2px 4px 10px rgba(255, 10, 84, 0.5);
+            margin-bottom: 10px;
         }
 
         p {
-            color: #594d5b;
-            font-size: 1.1rem;
-            line-height: 1.6;
+            color: #4a4a4a;
+            font-weight: 500;
+            margin-bottom: 25px;
         }
 
-        .floating-heart {
+        .btn {
+            background: var(--hot-pink);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 10, 84, 0.4);
+        }
+
+        .btn:hover {
+            background: #ff477e;
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 10, 84, 0.6);
+        }
+
+        /* Falling Hearts Animation */
+        .falling-heart {
             position: absolute;
+            top: -10%;
+            color: rgba(255, 10, 84, 0.6);
+            user-select: none;
             pointer-events: none;
-            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
-            z-index: 10;
+            animation: fall linear forwards;
         }
 
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
-
-        /* Subtle background sparkles */
-        .sparkle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: float 5s infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
-    <div class="card" onclick="createHeart(event)">
-        <div class="heart-icon">❤</div>
+    <div class="container">
+        <img src="x.jpeg" alt="Couple Image" class="profile-img">
         <h1>I Love You</h1>
-        <p>You make every single day feel like a beautiful dream.</p>
+        <p>You are the best thing that ever happened to me. Every moment with you is a treasure.</p>
+        <button class="btn" onclick="celebrate()">Click for Love</button>
     </div>
 
     <script>
-        // Generate background sparkles
-        for (let i = 0; i < 20; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            const size = Math.random() * 5 + 2 + 'px';
-            sparkle.style.width = size;
-            sparkle.style.height = size;
-            sparkle.style.left = Math.random() * 100 + 'vw';
-            sparkle.style.top = Math.random() * 100 + 'vh';
-            sparkle.style.animationDuration = Math.random() * 3 + 2 + 's';
-            sparkle.style.animationDelay = Math.random() * 2 + 's';
-            document.body.appendChild(sparkle);
-        }
-
-        // Heart burst click effect
-        function createHeart(e) {
-            for (let i = 0; i < 8; i++) {
-                const heart = document.createElement('div');
-                heart.innerHTML = '❤';
-                heart.className = 'floating-heart';
-                heart.style.left = e.clientX + 'px';
-                heart.style.top = e.clientY + 'px';
-                heart.style.color = '#ff4d6d';
-                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-                
-                const destinationX = (Math.random() - 0.5) * 300;
-                const destinationY = (Math.random() - 0.5) * 300;
-                
-                document.body.appendChild(heart);
-
-                requestAnimationFrame(() => {
-                    heart.style.transform = `translate(${destinationX}px, ${destinationY}px) rotate(${Math.random() * 360}deg)`;
-                    heart.style.opacity = '0';
-                });
-
-                setTimeout(() => heart.remove(), 1000);
-            }
-        }
-    
-
-        // Register Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
+                // The {scope: './'} is the key for GitHub Pages
                 navigator.serviceWorker.register('sw.js', {scope: './'})
-                    .then((registration) => {
-                        console.log('Registered at:', registration.scope);
-                    });
+                    .then(reg => console.log('SW registered!', reg))
+                    .catch(err => console.log('SW failed!', err));
             });
         }
+        // Automatic Falling Hearts
+        function createFallingHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.classList.add('falling-heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.opacity = Math.random();
+            
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
 
-        // Hacker-themed chart configurations
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#00ff41',
-                        font: { family: "'Courier New', monospace", size: 12 }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    ticks: { color: '#00aa00' },
-                    grid: { color: 'rgba(0, 255, 65, 0.1)' }
-                },
-                x: {
-                    ticks: { color: '#00aa00' },
-                    grid: { color: 'rgba(0, 255, 65, 0.1)' }
-                }
+        setInterval(createFallingHeart, 300);
+
+        // Button Click "Explosion"
+        function celebrate() {
+            for(let i=0; i<30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '💖';
+                    heart.style.position = 'absolute';
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    heart.style.fontSize = '2rem';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.transition = 'all 1s ease-out';
+                    
+                    const x = (Math.random() - 0.5) * window.innerWidth;
+                    const y = (Math.random() - 0.5) * window.innerHeight;
+                    
+                    document.body.appendChild(heart);
+                    
+                    requestAnimationFrame(() => {
+                        heart.style.transform = `translate(${x}px, ${y}px) scale(0) rotate(360deg)`;
+                        heart.style.opacity = '0';
+                    });
+                    
+                    setTimeout(() => heart.remove(), 1000);
+                }, i * 20);
             }
-        };
-
-        // Line Chart - Anomalies
-        const lineCtx = document.getElementById('lineChart').getContext('2d');
-        new Chart(lineCtx, {
-            type: 'line',
-            data: {
-                labels: ['00:00', '06:00', '12:00', '18:00', '00:00', '06:00'],
-                datasets: [{
-                    label: 'Threat Level',
-                    data: [35, 62, 48, 78, 92, 85],
-                    borderColor: '#ff0000',
-                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: '#ff00ff',
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                    borderWidth: 2
-                }]
-            },
-            options: chartOptions
-        });
-
-        // Pie Chart - Attack Vectors
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        new Chart(pieCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['SQL Injection', 'Brute Force', 'DDoS', 'XSS', 'Zero-Day'],
-                datasets: [{
-                    data: [28, 25, 20, 15, 12],
-                    backgroundColor: ['#ff0000', '#ff00ff', '#00ff41', '#ffa500', '#00ffff'],
-                    borderColor: '#0d0221',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                ...chartOptions,
-                plugins: {
-                    ...chartOptions.plugins,
-                    legend: {
-                        ...chartOptions.plugins.legend,
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-
-        // Bar Chart - Vulnerabilities
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['CVE-1', 'CVE-2', 'CVE-3', 'CVE-4', 'CVE-5'],
-                datasets: [{
-                    label: 'Severity Score',
-                    data: [95, 87, 72, 65, 58],
-                    backgroundColor: '#ff0000',
-                    borderColor: '#ff00ff',
-                    borderWidth: 2
-                }]
-            },
-            options: chartOptions
-        });
-
-        // Radar Chart - Defense Systems
-        const radarCtx = document.getElementById('radarChart').getContext('2d');
-        new Chart(radarCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Firewall', 'IDS', 'WAF', 'Encryption', 'Auth'],
-                datasets: [{
-                    label: 'Defense Level',
-                    data: [75, 68, 82, 90, 85],
-                    borderColor: '#00ff41',
-                    backgroundColor: 'rgba(0, 255, 65, 0.15)',
-                    pointBackgroundColor: '#ff00ff',
-                    pointRadius: 6,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                ...chartOptions,
-                scales: {
-                    r: {
-                        ticks: { color: '#00aa00' },
-                        grid: { color: 'rgba(0, 255, 65, 0.1)' }
-                    }
-                }
-            }
-        });
+        }
     </script>
 </body>
 </html>
