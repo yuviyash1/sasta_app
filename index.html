@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Test App</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#317EFB"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Installable Test App</h1>
+        <p>If your setup is correct, your browser will offer to "Add to Home Screen" or "Install".</p>
+    </div>
+
+    <img src="https://yashwant-singh.com.np/logoo/icon-192.png">
+    <img src="https://yashwant-singh.com.np/logoo/icon-512.png">
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Adding {scope: './'} helps GitHub Pages understand the folder structure
+                navigator.serviceWorker.register('sw.js', {scope: './'})
+                    .then((registration) => {
+                        console.log('Registered at:', registration.scope);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
