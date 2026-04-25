@@ -1,6 +1,6 @@
 {
-  "name": "Test",
-  "short_name": "TT",
+  "name": "My App",
+  "short_name": "App",
   "description": "A fast, reliable PWA.",
   "start_url": "/",
   "scope": "/",
