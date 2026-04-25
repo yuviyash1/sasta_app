@@ -2,7 +2,7 @@
   "name": "Sandhya Khatiwada",
   "short_name": "SK",
   "description": "A fast, reliable PWA.",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
