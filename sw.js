@@ -1,15 +1,42 @@
+importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDZR-o19et3CGouP0-4XScIc7ZcocV05SA",
+    authDomain: "pwa-f72eb.firebaseapp.com",
+    projectId: "pwa-f72eb",
+    storageBucket: "pwa-f72eb.firebasestorage.app",
+    messagingSenderId: "435190849777",
+    appId: "1:435190849777:web:48026cc2aca5bb8d2dc950",
+    measurementId: "G-BF6X6ZBD29"
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+// Background message handler
+messaging.onBackgroundMessage((payload) => {
+  console.log('[sw.js] Received background message ', payload);
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: 'icons/icon-192x192.png'
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Cache logic
 const CACHE_NAME = 'love-app-v4';
 const urlsToCache = [
   'index.html',
   'manifest.json',
-  'x.jpeg' 
-  // Add icons here ONLY if they definitely exist in your folder
+  'x.jpeg'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      // Use cache.addAll cautiously; if one fails, all fail.
       return cache.addAll(urlsToCache);
     })
   );
@@ -34,7 +61,6 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Handle notification clicks
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(

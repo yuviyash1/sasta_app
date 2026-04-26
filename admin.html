@@ -143,7 +143,23 @@
         <a href="index.html" class="back-link">← Back to App</a>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZR-o19et3CGouP0-4XScIc7ZcocV05SA",
+            authDomain: "pwa-f72eb.firebaseapp.com",
+            projectId: "pwa-f72eb",
+            storageBucket: "pwa-f72eb.firebasestorage.app",
+            messagingSenderId: "435190849777",
+            appId: "1:435190849777:web:48026cc2aca5bb8d2dc950",
+            measurementId: "G-BF6X6ZBD29"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         async function sendCustomNotification() {
             const title = document.getElementById('title').value.trim();
             const body = document.getElementById('body').value.trim();
@@ -153,39 +169,54 @@
                 return;
             }
 
-            if (!("Notification" in window)) {
-                alert("This browser does not support desktop notification");
-                return;
-            }
+            // Get Server Key (Ask user to paste it or hardcode if they trust the page)
+            const serverKey = prompt("Please enter your Firebase Server Key (from Cloud Messaging settings):");
+            if (!serverKey) return;
 
-            let permission = Notification.permission;
-            if (permission !== "granted") {
-                permission = await Notification.requestPermission();
-            }
+            try {
+                // 1. Fetch all tokens from Firestore
+                const querySnapshot = await getDocs(collection(db, "tokens"));
+                const tokens = [];
+                querySnapshot.forEach((doc) => {
+                    tokens.push(doc.data().token);
+                });
 
-            if (permission === "granted") {
-                const options = {
-                    body: body,
-                    icon: 'icons/icon-192x192.png',
-                    vibrate: [100, 50, 100],
-                    data: {
-                        dateOfArrival: Date.now(),
-                        primaryKey: 1
-                    }
-                };
-                
-                if ('serviceWorker' in navigator) {
-                    const registration = await navigator.serviceWorker.ready;
-                    registration.showNotification(title, options);
-                    alert("Notification Sent! ❤️");
-                } else {
-                    new Notification(title, options);
-                    alert("Notification Sent! ❤️");
+                if (tokens.length === 0) {
+                    alert("No users subscribed yet!");
+                    return;
                 }
-            } else {
-                alert("Notification permission denied");
+
+                console.log(`Sending to ${tokens.length} users...`);
+
+                // 2. Send via FCM Legacy API (easiest for client-side broadcast)
+                const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `key=${serverKey}`
+                    },
+                    body: JSON.stringify({
+                        registration_ids: tokens,
+                        notification: {
+                            title: title,
+                            body: body,
+                            icon: 'icons/icon-192x192.png',
+                            click_action: 'https://yuviyash1.github.io/sasta_app/' // Change to your actual URL
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                console.log('FCM Result:', result);
+                alert(`Broadcast complete! Success: ${result.success}, Failure: ${result.failure}`);
+
+            } catch (err) {
+                console.error('Broadcast failed:', err);
+                alert("Error sending broadcast. Check console.");
             }
         }
+
+        window.sendCustomNotification = sendCustomNotification;
     </script>
 </body>
 </html>
