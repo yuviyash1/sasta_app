@@ -105,6 +105,24 @@
             box-shadow: 0 8px 25px rgba(255, 10, 84, 0.6);
         }
 
+        .btn-link {
+            display: inline-block;
+            margin-top: 20px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-link:hover {
+            color: var(--hot-pink);
+            text-decoration: underline;
+        }
+
         /* Falling Hearts Animation */
         .falling-heart {
             position: absolute;
@@ -127,6 +145,8 @@
         <h1>I Love You</h1>
         <p>You are the best thing that ever happened to me. Every moment with you is a treasure.</p>
         <button class="btn" onclick="celebrate()">Click for Love</button>
+        <br>
+        <button class="btn-link" onclick="window.location.href='kitchen.html'">Kitchen</button>
     </div>
 
     <script>
