@@ -165,13 +165,13 @@
                     heart.style.top = '50%';
                     heart.style.fontSize = '2rem';
                     heart.style.pointerEvents = 'none';
+                    heart.style.zIndex = '20';
                     heart.style.transition = 'all 1s ease-out';
                     
                     const x = (Math.random() - 0.5) * window.innerWidth;
                     const y = (Math.random() - 0.5) * window.innerHeight;
                     
                     document.body.appendChild(heart);
-                    
                     requestAnimationFrame(() => {
                         heart.style.transform = `translate(${x}px, ${y}px) scale(0) rotate(360deg)`;
                         heart.style.opacity = '0';
