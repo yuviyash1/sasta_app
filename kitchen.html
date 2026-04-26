@@ -3,95 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Kitchen</title>
+    <title>Kitchen Expenses | Shared</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
         :root {
-            --hot-pink: #ff0a54;
-            --soft-pink: #ff85a1;
+            --primary: #f59e0b;
+            --secondary: #d97706;
+            --bg: #fffcf2;
+            --card-bg: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             min-height: 100vh;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #fceabb, #f8b500);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Poppins', sans-serif;
+            padding: 20px;
             overflow-x: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .container {
-            position: relative;
-            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
             text-align: center;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            padding: 50px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-            max-width: 500px;
-            width: 90%;
+            position: relative;
         }
 
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            color: #d35400;
-            margin-bottom: 15px;
-            text-shadow: 2px 4px 10px rgba(211, 84, 0, 0.3);
+        /* Login Panel Styles */
+        #login-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        p {
-            color: #5d4037;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .btn-back {
-            background: #d35400;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-size: 1rem;
+        .user-btn {
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid #fef3c7;
+            background: white;
             cursor: pointer;
             transition: 0.3s;
-            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .user-btn:hover {
+            border-color: var(--primary);
+            background: #fffcf2;
+            transform: translateY(-3px);
+        }
+
+        /* Dashboard Styles */
+        #dashboard { display: none; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #fffcf2;
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid #fef3c7;
+        }
+
+        .stat-label { font-size: 0.75rem; color: #b45309; opacity: 0.8; margin-bottom: 5px; }
+        .stat-value { font-size: 1.4rem; font-weight: 700; color: #78350f; }
+
+        .form-group { text-align: left; margin-bottom: 15px; }
+        label { font-size: 0.85rem; color: #92400e; margin-bottom: 5px; display: block; }
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #fde68a;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .btn-add {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover { background: var(--secondary); }
+
+        .history-list {
+            margin-top: 30px;
+            list-style: none;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 12px;
+            border-bottom: 1px solid #fef3c7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-info { display: flex; flex-direction: column; }
+        .item-name { font-weight: 600; font-size: 0.9rem; color: #78350f; }
+        .item-meta { font-size: 0.7rem; color: #b45309; }
+        .item-price { font-weight: 700; color: var(--secondary); }
+
+        .back-link {
             display: inline-block;
-        }
-
-        .btn-back:hover {
-            background: #e67e22;
-            transform: scale(1.05);
-        }
-
-        .emoji {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
+            margin-top: 20px;
+            color: #b45309;
+            text-decoration: none;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <span class="emoji">🍳👩‍🍳👨‍🍳</span>
-        <h1>Kitchen</h1>
-        <p>Something delicious is cooking here! This is where we share our favorite recipes and meals.</p>
-        <a href="index.html" class="btn-back">Back to Home</a>
+        <!-- Login Panel -->
+        <div id="login-panel">
+            <h1 style="color: #92400e; margin-bottom: 10px;">Who are you?</h1>
+            <button class="user-btn" onclick="login('yuvi')">👨‍💻 I am Yuvi</button>
+            <button class="user-btn" onclick="login('sandhya')">👩‍💻 I am Sandhya</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard">
+            <h2 id="welcome-msg" style="color: #92400e; margin-bottom: 20px;">Kitchen Dashboard</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Spent by Me</div>
+                    <div class="stat-value" id="my-total">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label" id="other-label">Spent by Other</div>
+                    <div class="stat-value" id="other-total">₹0</div>
+                </div>
+            </div>
+
+            <form id="expense-form">
+                <div class="form-group">
+                    <input type="text" id="desc" placeholder="What did you buy? (e.g. Eggs)" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="amt" placeholder="Amount (₹)" required>
+                </div>
+                <button type="submit" class="btn-add">Add to Kitchen</button>
+            </form>
+
+            <ul class="history-list" id="history"></ul>
+
+            <a href="index.html" class="back-link">← Back Home</a>
+            <button onclick="logout()" style="background:none; border:none; color:#b45309; font-size:0.7rem; cursor:pointer; display:block; margin:10px auto;">Logout</button>
+        </div>
     </div>
+
+    <script type="module">
+        // Auth Guard
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            localStorage.setItem('redirectAfterLogin', 'kitchen.html');
+            window.location.href = 'login.html';
+        }
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZR-o19et3CGouP0-4XScIc7ZcocV05SA",
+            authDomain: "pwa-f72eb.firebaseapp.com",
+            projectId: "pwa-f72eb",
+            databaseURL: "https://pwa-f72eb-default-rtdb.firebaseio.com",
+            storageBucket: "pwa-f72eb.firebasestorage.app",
+            messagingSenderId: "435190849777",
+            appId: "1:435190849777:web:48026cc2aca5bb8d2dc950",
+            measurementId: "G-BF6X6ZBD29"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let currentUser = localStorage.getItem('kitchen_user');
+
+        function login(user) {
+            localStorage.setItem('kitchen_user', user);
+            currentUser = user;
+            showDashboard();
+        }
+
+        function logout() {
+            localStorage.removeItem('kitchen_user');
+            location.reload();
+        }
+
+        function showDashboard() {
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = `Hello, ${currentUser.charAt(0).toUpperCase() + currentUser.slice(1)}! 🍳`;
+            document.getElementById('other-label').innerText = `Spent by ${currentUser === 'yuvi' ? 'Sandhya' : 'Yuvi'}`;
+            loadData();
+        }
+
+        function loadData() {
+            const expensesRef = ref(db, 'kitchen_expenses');
+            onValue(expensesRef, (snapshot) => {
+                const data = snapshot.val();
+                let myTotal = 0;
+                let otherTotal = 0;
+                const historyEl = document.getElementById('history');
+                historyEl.innerHTML = '';
+
+                if (data) {
+                    Object.keys(data).reverse().forEach(key => {
+                        const exp = data[key];
+                        if (exp.user === currentUser) {
+                            myTotal += parseFloat(exp.amount);
+                        } else {
+                            otherTotal += parseFloat(exp.amount);
+                        }
+
+                        const li = document.createElement('li');
+                        li.className = 'history-item';
+                        li.innerHTML = `
+                            <div class="item-info">
+                                <span class="item-name">${exp.desc}</span>
+                                <span class="item-meta">By ${exp.user} • ${exp.date}</span>
+                            </div>
+                            <span class="item-price">₹${exp.amount}</span>
+                        `;
+                        historyEl.appendChild(li);
+                    });
+                }
+
+                document.getElementById('my-total').innerText = `₹${myTotal}`;
+                document.getElementById('other-total').innerText = `₹${otherTotal}`;
+            });
+        }
+
+        document.getElementById('expense-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const desc = document.getElementById('desc').value;
+            const amount = document.getElementById('amt').value;
+
+            const expensesRef = ref(db, 'kitchen_expenses');
+            push(expensesRef, {
+                user: currentUser,
+                desc: desc,
+                amount: amount,
+                date: new Date().toLocaleDateString()
+            });
+
+            document.getElementById('desc').value = '';
+            document.getElementById('amt').value = '';
+        });
+
+        // Initialize view
+        if (currentUser) {
+            showDashboard();
+        }
+
+        window.login = login;
+        window.logout = logout;
+    </script>
 </body>
 </html>
