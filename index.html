@@ -154,12 +154,13 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDZR-o19et3CGouP0-4XScIc7ZcocV05SA",
             authDomain: "pwa-f72eb.firebaseapp.com",
             projectId: "pwa-f72eb",
+            databaseURL: "https://pwa-f72eb-default-rtdb.firebaseio.com",
             storageBucket: "pwa-f72eb.firebasestorage.app",
             messagingSenderId: "435190849777",
             appId: "1:435190849777:web:48026cc2aca5bb8d2dc950",
@@ -168,7 +169,7 @@
 
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
-        const db = getFirestore(app);
+        const db = getDatabase(app);
 
         // Register Service Worker
         if ('serviceWorker' in navigator) {
@@ -196,10 +197,10 @@
 
                     if (token) {
                         console.log('Token generated:', token);
-                        // Store token in Firestore so admin can send to it
-                        await setDoc(doc(db, "tokens", token), {
+                        // Store token in Realtime Database so admin can send to it
+                        set(ref(db, 'tokens/' + token.replace(/\./g, '_')), {
                             token: token,
-                            timestamp: new Date()
+                            timestamp: new Date().getTime()
                         });
                     }
                 }

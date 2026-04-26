@@ -145,12 +145,13 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDZR-o19et3CGouP0-4XScIc7ZcocV05SA",
             authDomain: "pwa-f72eb.firebaseapp.com",
             projectId: "pwa-f72eb",
+            databaseURL: "https://pwa-f72eb-default-rtdb.firebaseio.com",
             storageBucket: "pwa-f72eb.firebasestorage.app",
             messagingSenderId: "435190849777",
             appId: "1:435190849777:web:48026cc2aca5bb8d2dc950",
@@ -158,7 +159,7 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db = getDatabase(app);
 
         async function sendCustomNotification() {
             const title = document.getElementById('title').value.trim();
@@ -169,22 +170,21 @@
                 return;
             }
 
-            // Get Server Key (Ask user to paste it or hardcode if they trust the page)
             const serverKey = prompt("Please enter your Firebase Server Key (from Cloud Messaging settings):");
             if (!serverKey) return;
 
             try {
-                // 1. Fetch all tokens from Firestore
-                const querySnapshot = await getDocs(collection(db, "tokens"));
-                const tokens = [];
-                querySnapshot.forEach((doc) => {
-                    tokens.push(doc.data().token);
-                });
-
-                if (tokens.length === 0) {
+                // 1. Fetch all tokens from Realtime Database
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, 'tokens'));
+                
+                if (!snapshot.exists()) {
                     alert("No users subscribed yet!");
                     return;
                 }
+
+                const data = snapshot.val();
+                const tokens = Object.values(data).map(item => item.token);
 
                 console.log(`Sending to ${tokens.length} users...`);
 
