@@ -296,6 +296,11 @@
                 }, i * 20);
             }
         }
+
+        // Expose functions to window because this is a module script
+        window.celebrate = celebrate;
+        window.sendNotification = sendNotification;
+        window.handleAdminReveal = handleAdminReveal;
     </script>
 </body>
 </html>
