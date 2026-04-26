@@ -33,3 +33,11 @@ self.addEventListener('fetch', event => {
     })
   );
 });
+
+// Handle notification clicks
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
+  );
+});

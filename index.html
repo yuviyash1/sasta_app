@@ -141,7 +141,7 @@
 <body>
 
     <div class="container">
-        <img src="x.jpeg" alt="Couple Image" class="profile-img">
+        <img src="x.jpeg" alt="Couple Image" class="profile-img" onclick="handleAdminReveal()">
         <h1>I Love You</h1>
         <p>You are the best thing that ever happened to me. Every moment with you is a treasure.</p>
         <button class="btn" onclick="celebrate()">Click for Love</button>
@@ -160,6 +160,66 @@
                     .catch(err => console.log('SW failed!', err));
             });
         }
+
+        async function sendNotification() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+                return;
+            }
+
+            let permission = Notification.permission;
+            if (permission === "default") {
+                permission = await Notification.requestPermission();
+            }
+
+            if (permission === "granted") {
+                const options = {
+                    body: 'You have a new message from Yuvi! ❤️',
+                    icon: 'icons/icon-192x192.png',
+                    vibrate: [100, 50, 100],
+                    data: {
+                        dateOfArrival: Date.now(),
+                        primaryKey: 1
+                    }
+                };
+                
+                // Use service worker to show notification (best for PWAs)
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification('Love Alert!', options);
+                    });
+                } else {
+                    // Fallback to browser notification
+                    new Notification('Love Alert!', options);
+                }
+            } else {
+                alert("Notification permission denied");
+            }
+        }
+
+        // Admin Secret Reveal
+        let clickCount = 0;
+        let lastClickTime = 0;
+        
+        function handleAdminReveal() {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastClickTime > 1000) {
+                clickCount = 0; // Reset if too slow
+            }
+            clickCount++;
+            lastClickTime = currentTime;
+            
+            if (clickCount === 5) {
+                const password = prompt("Enter Admin Password:");
+                if (password === "1234") { // Simple secret password
+                    window.location.href = 'admin.html';
+                } else {
+                    alert("Wrong password!");
+                    clickCount = 0;
+                }
+            }
+        }
+
         // Automatic Falling Hearts
         function createFallingHeart() {
             const heart = document.createElement('div');
