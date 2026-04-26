@@ -154,7 +154,7 @@
 
     <div class="container">
         <div class="version">v1.0.6</div>
-        <img src="x.jpeg" alt="Couple Image" class="profile-img" onclick="handleAdminReveal()">
+        <img src="x.jpeg" alt="Couple Image" class="profile-img">
         <h1>I Love You</h1>
         <p>You are the best thing that ever happened to me. Every moment with you is a treasure.</p>
         <button class="btn" onclick="celebrate()">Click for Love</button>
@@ -166,7 +166,6 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
         const firebaseConfig = {
@@ -181,7 +180,6 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const messaging = getMessaging(app);
         const db = getDatabase(app);
 
         // Register Service Worker
@@ -190,81 +188,12 @@
                 navigator.serviceWorker.register('sw.js', {scope: './'})
                     .then(reg => {
                         console.log('SW registered!', reg);
-                        setupNotifications(reg);
                     })
                     .catch(err => console.log('SW failed!', err));
             });
         }
 
-        async function setupNotifications(registration) {
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    // Get FCM Token
-                    // NOTE: You need to generate a "Web Push Certificate" key in Firebase Console
-                    // and paste it here in 'vapidKey'
-                    const token = await getToken(messaging, { 
-                        serviceWorkerRegistration: registration,
-                        vapidKey: 'BFiXuF7_YNCJqRFYGpLbEC-frioYg-D4r2U48egy2SZ6pr3ysWZSR47TpZ73L2sVVmuzGXri2Js-76R21EDXhUw' 
-                    });
 
-                    if (token) {
-                        console.log('Token generated:', token);
-                        // Store token in Realtime Database so admin can send to it
-                        set(ref(db, 'tokens/' + token.replace(/\./g, '_')), {
-                            token: token,
-                            timestamp: new Date().getTime()
-                        });
-                    }
-                }
-            } catch (err) {
-                console.log('Notification setup failed:', err);
-            }
-        }
-
-        // Handle messages when app is in foreground
-        onMessage(messaging, (payload) => {
-            console.log('Message received. ', payload);
-            if (Notification.permission === 'granted') {
-                const notificationTitle = payload.notification.title;
-                const notificationOptions = {
-                    body: payload.notification.body,
-                    icon: 'icons/icon-192x192.png',
-                };
-                // Use the service worker to show the notification
-                navigator.serviceWorker.ready.then(registration => {
-                    registration.showNotification(notificationTitle, notificationOptions);
-                });
-            }
-        });
-
-        async function sendNotification() {
-            // This is now handled by the admin page
-            window.location.href = 'admin.html';
-        }
-
-        // Admin Secret Reveal
-        let clickCount = 0;
-        let lastClickTime = 0;
-        
-        function handleAdminReveal() {
-            const currentTime = new Date().getTime();
-            if (currentTime - lastClickTime > 1000) {
-                clickCount = 0; // Reset if too slow
-            }
-            clickCount++;
-            lastClickTime = currentTime;
-            
-            if (clickCount === 5) {
-                const password = prompt("Enter Admin Password:");
-                if (password === "1234") { // Simple secret password
-                    window.location.href = 'admin.html';
-                } else {
-                    alert("Wrong password!");
-                    clickCount = 0;
-                }
-            }
-        }
 
         // Automatic Falling Hearts
         function createFallingHeart() {
@@ -312,8 +241,6 @@
 
         // Expose functions to window because this is a module script
         window.celebrate = celebrate;
-        window.sendNotification = sendNotification;
-        window.handleAdminReveal = handleAdminReveal;
     </script>
 </body>
 </html>
