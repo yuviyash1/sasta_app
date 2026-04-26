@@ -27,7 +27,7 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 // Cache logic
-const CACHE_NAME = 'love-app-v4';
+const CACHE_NAME = 'love-app-v5';
 const urlsToCache = [
   'index.html',
   'manifest.json',
