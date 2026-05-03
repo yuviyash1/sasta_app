@@ -10,8 +10,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap');
 
         :root {
-            --hot-pink: #ff0a54;
-            --soft-pink: #ff85a1;
+            /* --hot-pink: #ff0a54; */
+            --hot-pink: #861e1e;
+            --soft-pink: #ff6c09;
+            /* --soft-pink: #ff85a1; */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -155,8 +157,8 @@
     <div class="container">
         <div class="version">v1.0.6</div>
         <img src="x.jpeg" alt="Couple Image" class="profile-img">
-        <h1>I Love You</h1>
-        <p>You are the best thing that ever happened to me. Every moment with you is a treasure.</p>
+        <h1>Pasta Tatau</h1>
+        <p>ASAP!!!!</p>
         <button class="btn" onclick="celebrate()">Click for Love</button>
         <br>
         <button class="btn-link" onclick="window.location.href='kitchen.html'">Kitchen</button>
@@ -198,7 +200,9 @@
         // Automatic Falling Hearts
         function createFallingHeart() {
             const heart = document.createElement('div');
-            heart.innerHTML = '❤';
+            // heart.innerHTML = '❤';
+            heart.innerHTML = '😡';
+
             heart.classList.add('falling-heart');
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.fontSize = Math.random() * 20 + 10 + 'px';
@@ -216,7 +220,8 @@
             for(let i=0; i<30; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
-                    heart.innerHTML = '💖';
+                    // heart.innerHTML = '💖';
+                    heart.innerHTML = '😡';
                     heart.style.position = 'absolute';
                     heart.style.left = '50%';
                     heart.style.top = '50%';

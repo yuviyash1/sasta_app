@@ -1,5 +1,5 @@
 // Cache logic
-const CACHE_NAME = 'love-app-v6';
+const CACHE_NAME = 'love-app-v1';
 const urlsToCache = [
   'index.html',
   'manifest.json',
